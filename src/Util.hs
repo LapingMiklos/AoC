@@ -31,3 +31,16 @@ count p = foldl (\n x -> if p x then n + 1 else n) 0
 safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
 safeHead (x : _) = Just x
+
+histogram :: Eq a => [a] -> [(a, Int)]
+histogram = foldl histInsert []
+  where
+    histInsert :: Eq a => [(a, Int)] -> a -> [(a, Int)]
+    histInsert [] x = [(x, 1)]
+    histInsert ((elem, count) : pairs) x
+      | x == elem = (elem, count + 1) : pairs
+      | otherwise = (elem, count) : histInsert pairs x
+
+safeLast :: [a] -> Maybe a
+safeLast [] = Nothing
+safeLast xs = Just $ last xs
